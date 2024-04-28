@@ -1,0 +1,4 @@
+*.ppm
+example
+*.dSYM
+.DS_Store
