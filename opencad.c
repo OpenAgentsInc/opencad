@@ -6,6 +6,12 @@
 #ifndef OPENCAD_C_
 #define OPENCAD_C_
 
+typedef int Errno;
+
+#define return_defer(value) do { result = (value); goto defer; } while (0)
+
+#define OPENCAD_SWAP(T, a, b) do { T t = a; a = b; b = t; } while (0)
+
 /**
  * Swaps the values of two integers.
  * @param a The first integer.
@@ -31,10 +37,6 @@ void opencad_fill(uint32_t *pixels, size_t width, size_t height, uint32_t color)
         pixels[i] = color;
     }
 }
-
-typedef int Errno;
-
-#define return_defer(value) do { result = (value); goto defer; } while (0)
 
 /**
  * Saves the pixel buffer to a PPM file.
@@ -155,12 +157,12 @@ void opencad_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_heig
     if (dx != 0) {
         int c = y1 - dy*x1/dx;
 
-        if (x1 > x2) swap_int(&x1, &x2);
+        if (x1 > x2) OPENCAD_SWAP(int, x1, x2);
         for (int x = x1; x <= x2; ++x) {
             if (0 <= x && x < (int) pixels_width) {
                 int sy1 = dy*x/dx + c;
                 int sy2 = dy*(x + 1)/dx + c;
-                if (sy1 > sy2) swap_int(&sy1, &sy2);
+                if (sy1 > sy2) OPENCAD_SWAP(int, sy1, sy2);
                 for (int y = sy1; y <= sy2; ++y) {
                     if (0 <= y && y < (int) pixels_height) {
                         pixels[y*pixels_width + x] = color;
@@ -171,7 +173,7 @@ void opencad_draw_line(uint32_t *pixels, size_t pixels_width, size_t pixels_heig
     } else {
         int x = x1;
         if (0 <= x && x < (int) pixels_width) {
-            if (y1 > y2) swap_int(&y1, &y2);
+            if (y1 > y2) OPENCAD_SWAP(int, y1, y2);
             for (int y = y1; y <= y2; ++y) {
                 if (0 <= y && y < (int) pixels_height) {
                     pixels[y*pixels_width + x] = color;
