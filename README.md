@@ -1,6 +1,8 @@
 # OpenCAD
 
-A wild experiment
+A wild experiment: agent-first CAD written from scratch in C
+
+![brick](./assets/brick.png)
 
 ## Tech stack
 
